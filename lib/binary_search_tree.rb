@@ -40,61 +40,50 @@ class BinarySearchTree
     end
   end
 
-  def depth_of(score)
-    if @root == nil
+  def depth_of(score, node = @root, depth = 0)
+    if node == nil
       return nil
-    elsif @root == score
-      return 0
-    elsif @root.score > score
-      @root.depth_of_node(@root.left, score, 1)
+    elsif node.score == score
+      return depth
+    elsif node.score > score
+      depth += 1
+      depth_of(score, node.left, depth)
     else
-      @root.depth_of_node(@root.right, score, 1)
+      depth += 1
+      depth_of(score, node.right,  depth)
     end
   end
 
-  def depth_of(score)
-    if @root == nil
-      return nil
-    elsif @root.score == score
-      return 0
-    elsif @root.score > score
-      if @root.left == nil
-        return nil
-      else
-        @root.depth_of_node(@root.left, score, 1)
-      end
-    elsif @root.score < score
-      if @root.left == nil
-        return nil
-      else
-        @root.depth_of_node(@root.right, score, 1)
-      end
+  def min(node = @root)
+    if node.left == nil
+      return node.score
+    else
+      min(node.left)
     end
   end
 
-  def min
-    @root.min_node(@root)
-  end
-
-  def max
-    @root.max_node(@root)
+  def max(node = @root)
+    if node.right == nil
+      return node.score
+    else
+      max(node.right)
+    end
   end
 
   def sort
     sorted_array = []
-    sorted_array = sort_nodes(@root, sorted_array)
-    return sorted_array
+    return sort_recursion(@root, sorted_array)
   end
 
-  def sort_nodes(node, array)
+  def sort_recursion(node, array)
     if node.left == nil
       array << node.score
     else
-      sort_nodes(node.left, array)
+      sort_recursion(node.left, array)
       array << node.score
     end
     if node.right != nil
-      sort_nodes(node.right, array)
+      sort_recursion(node.right, array)
     end
     return array
   end
@@ -128,23 +117,36 @@ class BinarySearchTree
     end
   end
 
+  def leaves(node = @root)
+    if node == nil
+      return 0
+    elsif
+      node.left == nil && node.right == nil
+      return 1
+    else
+      left_leaves = leaves(node.left)
+      right_leaves = leaves(node.right)
+      return left_leaves + right_leaves
+    end
+  end
+
 end
 
 tree = BinarySearchTree.new
 
-tree.load('./movies.txt')
+# tree.load('./movies.txt')
 
-# puts tree.insert(50)
-# puts tree.insert(40)
-# puts tree.insert(60)
-# puts tree.insert(30)
-# puts tree.insert(70)
-# puts tree.insert(75)
-# puts tree.insert(25)
-# puts tree.insert(69)
-# puts tree.insert(45)
-# puts tree.insert(65)
-#
+tree.insert(50)
+tree.insert(40)
+tree.insert(60)
+tree.insert(30)
+tree.insert(70)
+tree.insert(75)
+tree.insert(25)
+tree.insert(69)
+tree.insert(45)
+tree.insert(65)
+
 puts tree.include?(50)
 puts tree.include?(40)
 puts tree.include?(60)
@@ -152,7 +154,7 @@ puts tree.include?(30)
 puts tree.include?(70)
 puts tree.include?(65)
 puts tree.include?(101)
-
+puts "-" * 40
 puts tree.depth_of(50)
 puts tree.depth_of(40)
 puts tree.depth_of(60)
@@ -160,6 +162,8 @@ puts tree.depth_of(30)
 puts tree.depth_of(70)
 puts tree.depth_of(71)
 puts tree.depth_of(69)
+puts tree.depth_of(65)
+puts "-" * 40
 
 puts tree.min
 puts tree.max
@@ -167,3 +171,5 @@ puts tree.max
 tree.sort
 
 puts tree.height
+
+puts tree.leaves

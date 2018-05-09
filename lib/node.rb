@@ -40,34 +40,18 @@ class Node
     end
   end
 
-  def depth_of_node(node, score, depth)
-    if node == nil
-      return nil
-    elsif node.score == score
-      return depth
-    elsif node.score > score
-      depth += 1
-      depth_of_node(node.left, score, depth)
-    else
-      depth += 1
-      depth_of_node(node.right, score, depth)
-    end
-  end
-
-  def min_node(node)
-    if node.left == nil
-      return node.score
-    else
-      min_node(node.left)
-    end
-  end
-
-  def max_node(node)
-    if node.right == nil
-      return node.score
-    else
-      max_node(node.right)
-    end
-  end
+  # def depth_of_node(node, score, depth)
+  #   if node == nil
+  #     return nil
+  #   elsif node.score == score
+  #     return depth
+  #   elsif node.score > score
+  #     depth += 1
+  #     depth_of_node(node.left, score, depth)
+  #   else
+  #     depth += 1
+  #     depth_of_node(node.right, score, depth)
+  #   end
+  # end
 
 end
