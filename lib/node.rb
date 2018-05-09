@@ -29,20 +29,14 @@ class Node
   end
 
   def include_node?(node, score)
-    if node.score == score
+    if node == nil
+      return false
+    elsif node.score == score
       return true
     elsif node.score > score
-      if node.left == nil
-        return false
-      else
         include_node?(node.left, score)
-      end
-    elsif node.score < score
-      if node.right == nil
-        return false
-      else
-        include_node?(node.right, score)
-      end
+    else
+      include_node?(node.right, score)
     end
   end
 

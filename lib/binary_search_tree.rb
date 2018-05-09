@@ -1,4 +1,4 @@
-#  srequire './lib/node.rb'
+require './lib/node.rb'
 require 'pry'
 
 class BinarySearchTree
@@ -31,10 +31,8 @@ class BinarySearchTree
   end
 
   def include?(score)
-    if @root == nil?
+    if @root == nil
       return false
-    elsif @root.score == score
-      return true
     elsif @root.score > score
       @root.include_node?(@root.left, score)
     else
@@ -43,7 +41,7 @@ class BinarySearchTree
   end
 
   # def include?(score)
-  #   if @root == nil?
+  #   if @root == nil
   #     return false
   #   elsif @root.score == score
   #     return true
@@ -51,13 +49,13 @@ class BinarySearchTree
   #     if @root.left == nil
   #       return false
   #     else
-  #       @root.left.include_node?(score)
+  #       @root.include_node?(@root.left, score)
   #     end
-  #   elsif @root.score < score
+  #   else
   #     if @root.right == nil
   #       return false
   #     else
-  #       @root.right.include_node?(score)
+  #       @root.include_node?(@root.right, score)
   #     end
   #   end
   # end
@@ -90,13 +88,31 @@ class BinarySearchTree
     @root.max_node(@root)
   end
 
+  def sort
+    sorted_array = []
+    sorted_array = sort_nodes(@root, sorted_array)
+    return sorted_array
+  end
+
+  def sort_nodes(node, array)
+    if node.left == nil
+      array << node.score
+    else
+      sort_nodes(node.left, array)
+      array << node.score
+    end
+    if node.right != nil
+      sort_nodes(node.right, array)
+    end
+    return array
+  end
+
   def load(file)
     movies_loaded_count = 0
     array_of_movie_lines = File.readlines(file)
     array_of_movie_lines.each do |movie|
       movie_line_array = movie.split(',')
       if include?(movie_line_array[0].to_i)
-        puts "DUPLICATE #{movie}"
         next
       else
         movies_loaded_count += 1
@@ -106,109 +122,17 @@ class BinarySearchTree
     movies_loaded_count
   end
 
-  def sort_nodes
-    sorted_array = []
-    sort(@root, sorted_array)
-    puts sorted_array
-  end
-
-  def sort(node, array)
-    if node.left == nil
-      array << node.score
+  def height(node = @root)
+    if node == nil
+      return -1
     else
-      sort(node.left, array)
-      array << node.score
-    end
-    if node.right != nil
-      sort(node.right, array)
-    end
-    return array
-  end
-
-end
-
-
-class Node
-
-  attr_accessor :score,
-                :left,
-                :right
-
-  def initialize(score)
-    @score = score
-  end
-
-  def insert_node(node, score, depth)
-    if node.score > score
-      if node.left == nil
-        node.left = Node.new(score)
-        return depth
+      left_depth = height(node.left)
+      right_depth = height(node.right)
+      if left_depth > right_depth
+        return height = left_depth + 1
       else
-        depth += 1
-        insert_node(node.left, score, depth)
+        return height = right_depth + 1
       end
-    elsif node.score < score
-      if node.right == nil
-        node.right = Node.new(score)
-        return depth
-      else
-        depth += 1
-        insert_node(node.right, score, depth)
-      end
-    end
-  end
-
-  def include_node?(node, score)
-    if node.score == score
-      return true
-    elsif node.score > score
-      if node.left == nil
-        return false
-      else
-        include_node?(node.left, score)
-      end
-    elsif node.score < score
-      if node.right == nil
-        return false
-      else
-        include_node?(node.right, score)
-      end
-    end
-  end
-
-  def depth_of_node(node, score, depth)
-    if node.score == score
-      return depth
-    elsif node.score > score
-      if node.left == nil
-        return nil
-      else
-        depth += 1
-        depth_of_node(node.left, score, depth)
-      end
-    elsif node.score < score
-      if node.right == nil
-        return nil
-      else
-        depth += 1
-        depth_of_node(node.right, score, depth)
-      end
-    end
-  end
-
-  def min_node(node)
-    if node.left == nil
-      return node.score
-    else
-      min_node(node.left)
-    end
-  end
-
-  def max_node(node)
-    if node.right == nil
-      return node.score
-    else
-      max_node(node.right)
     end
   end
 
@@ -216,18 +140,19 @@ end
 
 tree = BinarySearchTree.new
 
-# puts tree.load('./movies.txt')
+tree.load('./movies.txt')
 
-puts tree.insert(50)
-puts tree.insert(40)
-puts tree.insert(60)
-puts tree.insert(30)
-puts tree.insert(70)
-puts tree.insert(75)
-puts tree.insert(25)
-puts tree.insert(69)
-puts tree.insert(45)
-
+# puts tree.insert(50)
+# puts tree.insert(40)
+# puts tree.insert(60)
+# puts tree.insert(30)
+# puts tree.insert(70)
+# puts tree.insert(75)
+# puts tree.insert(25)
+# puts tree.insert(69)
+# puts tree.insert(45)
+# puts tree.insert(65)
+#
 puts tree.include?(50)
 puts tree.include?(40)
 puts tree.include?(60)
@@ -247,4 +172,6 @@ puts tree.depth_of(69)
 puts tree.min
 puts tree.max
 
-# puts tree.sort_nodes
+tree.sort
+
+puts tree.height
