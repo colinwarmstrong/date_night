@@ -34,7 +34,7 @@ class BinarySearchTree
         depth += 1
         insert(score, node.left, depth)
       end
-    elsif node.score < score
+    elsif score > node.score
       if node.right == nil
         node.right = Node.new(score)
         return depth += 1
@@ -42,6 +42,8 @@ class BinarySearchTree
         depth += 1
         insert(score, node.right, depth)
       end
+    else
+      return nil
     end
   end
 
@@ -199,8 +201,9 @@ puts "-" * 40
 puts tree.min
 puts tree.max
 puts "-" * 40
+
 tree.sort
-puts "-" * 40
+
 puts tree.height
 puts "-" * 40
 puts tree.leaves
