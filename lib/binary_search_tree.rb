@@ -1,4 +1,4 @@
-# require './lib/node.rb'
+#  srequire './lib/node.rb'
 require 'pry'
 
 class BinarySearchTree
@@ -11,88 +11,80 @@ class BinarySearchTree
 
   def insert(score)
     if @root == nil
+      @root == Node.new(score)
+      return 0
+    else
+      @root.insert_node(@root, score, 1)
+    end
+  end
+
+  def insert(score)
+    if @root == nil
       @root = Node.new(score)
       return 0
     elsif @root.score > score
-      if @left.nil?
-        @left = Node.new(score)
+      if @root.left == nil
+        @root.left = Node.new(score)
         return 1
       else
-        @left.insert_node(score, 2)
+        @root.left.insert_node(@root.left, score, 2)
       end
     elsif @root.score < score
-      if @right.nil?
-        @right = Node.new(score)
+      if @root.right == nil
+        @root.right = Node.new(score)
         return 1
       else
-        @right.insert_node(score, 2)
+        @root.right.insert_node(@root.right, score, 2)
       end
     end
   end
 
   def include?(score)
-    if @root.nil?
+    if @root == nil?
       return false
     elsif @root.score == score
       return true
     elsif @root.score > score
-      if @left.nil?
+      if @root.left == nil
         return false
       else
-        @left.include_node?(score)
+        @root.left.include_node?(score)
       end
     elsif @root.score < score
-      if @right.nil?
+      if @root.right == nil
         return false
       else
-        @right.include_node?(score)
+        @root.right.include_node?(score)
       end
     end
   end
 
   def depth_of(score)
     if @root == nil
-      nil
+      return nil
     elsif @root.score == score
-      0
+      return 0
     elsif @root.score > score
-      if @left.nil?
+      if @root.left == nil
         return nil
       else
-        @left.depth_of_node(score, 1)
+        @root.depth_of_node(@root.left, score, 1)
       end
     elsif @root.score < score
-      if @right.nil?
+      if @root.left == nil
         return nil
       else
-        @right.depth_of_node(score, 1)
+        @root.depth_of_node(@root.right, score, 1)
       end
-    end
-  end
-
-  def max
-    if @right.nil?
-      return @score
-    else
-      @right.max_node
     end
   end
 
   def min
-    if @left.nil?
-      return @score
-    else
-      @left.min_node
-    end
+    @root.min_node(@root)
   end
 
-  def sort
-    sorted_array = []
-    if @left.nil
-      sorted_array << @score
-    else
-      @left.sort_node(@root, sorted_array)
-    end
+  def max
+    @root.max_node(@root)
   end
 
   def load(file)
@@ -101,14 +93,33 @@ class BinarySearchTree
     array_of_movie_lines.each do |movie|
       movie_line_array = movie.split(',')
       if include?(movie_line_array[0].to_i)
+        puts "DUPLICATE #{movie}"
         next
       else
         movies_loaded_count += 1
         insert(movie_line_array[0].to_i)
       end
     end
-    puts movies_loaded_count
     movies_loaded_count
+  end
+
+  def sort_nodes
+    sorted_array = []
+    sort(@root, sorted_array)
+    puts sorted_array
+  end
+
+  def sort(node, array)
+    if node.left == nil
+      array << node.score
+    else
+      sort(node.left, array)
+      array << node.score
+    end
+    if node.right != nil
+      sort(node.right, array)
+    end
+    return array
   end
 
 end
@@ -124,22 +135,22 @@ class Node
     @score = score
   end
 
-  def insert_node(score, depth)
-    if @score > score
-      if @left.nil?
-        @left = Node.new(score)
+  def insert_node(node, score, depth)
+    if node.score > score
+      if node.left == nil
+        node.left = Node.new(score)
         return depth
       else
         depth += 1
-        @left.insert_node(score, depth)
+        insert_node(node.left, score, depth)
       end
-    elsif @score < score
-      if @right.nil?
-        @right = Node.new(score)
+    elsif node.score < score
+      if node.right == nil
+        node.right = Node.new(score)
         return depth
       else
         depth += 1
-        @right.insert_node(score, depth)
+        insert_node(node.right, score, depth)
       end
     end
   end
@@ -162,39 +173,39 @@ class Node
     end
   end
 
-  def depth_of_node(score, depth)
-    if @score == score
+  def depth_of_node(node, score, depth)
+    if node.score == score
       return depth
-    elsif @score > score
-      if @left.nil?
+    elsif node.score > score
+      if node.left == nil
         return nil
       else
         depth += 1
-        @left.depth_of_node(score, depth)
+        depth_of_node(node.left, score, depth)
       end
-    elsif @score < score
-      if @right.nil?
+    elsif node.score < score
+      if node.right == nil
         return nil
       else
         depth += 1
-        @right.depth_of_node(score, depth)
+        depth_of_node(node.right, score, depth)
       end
     end
   end
 
-  def max_node
-    if @right.nil?
-      return @score
+  def min_node(node)
+    if node.left == nil
+      return node.score
     else
-      @right.max_node
+      min_node(node.left)
     end
   end
 
-  def min_node
-    if @left.nil?
-      return @score
+  def max_node(node)
+    if node.right == nil
+      return node.score
     else
-      @left.min_node
+      max_node(node.right)
     end
   end
 
@@ -202,34 +213,35 @@ end
 
 tree = BinarySearchTree.new
 
-tree.load('./movies.txt')
+# puts tree.load('./movies.txt')
 
-# puts tree.insert(50)
-# puts tree.insert(40)
-# puts tree.insert(60)
-# puts tree.insert(30)
-# puts tree.insert(70)
-# puts tree.insert(35)
-# puts tree.insert(65)
-# puts tree.insert(67)
-# puts tree.insert(71)
-# puts tree.insert(29)
+puts tree.insert(50)
+puts tree.insert(40)
+puts tree.insert(60)
+puts tree.insert(30)
+puts tree.insert(70)
+puts tree.insert(75)
+puts tree.insert(25)
+puts tree.insert(69)
+puts tree.insert(45)
 
 puts tree.include?(50)
-puts tree.include?(60)
-puts tree.include?(69)
-puts tree.include?(67)
 puts tree.include?(40)
-puts tree.include?(19)
-puts tree.include?(1)
+puts tree.include?(60)
+puts tree.include?(30)
+puts tree.include?(70)
+puts tree.include?(65)
+puts tree.include?(101)
 
 puts tree.depth_of(50)
-puts tree.depth_of(60)
 puts tree.depth_of(40)
+puts tree.depth_of(60)
 puts tree.depth_of(30)
-puts tree.depth_of(67)
-puts tree.depth_of(33)
-puts tree.depth_of(29)
+puts tree.depth_of(70)
+puts tree.depth_of(71)
+puts tree.depth_of(69)
 
-puts tree.max
 puts tree.min
+puts tree.max
+
+# puts tree.sort_nodes

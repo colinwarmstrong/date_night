@@ -8,24 +8,26 @@ class Node
 
   def initialize(score)
     @score = score
+    @right = nil
+    @left = nil
   end
 
-  def insert_node(score, depth)
-    if @score > score
-      if @left.nil?
-        @left = Node.new(score)
+  def insert_node(node, score, depth)
+    if node.score > score
+      if node.left == nil
+        node.left = Node.new(score)
         return depth
       else
         depth += 1
-        @left.insert_node(score, depth)
+        node.insert_node(node.left, score, depth)
       end
-    elsif @score < score
-      if @right.nil?
-        @right = Node.new(score)
+    elsif node.score < score
+      if node.right == nil
+        node.right = Node.new(score)
         return depth
       else
         depth += 1
-        @right.insert_node(score, depth)
+        node.insert_node(node.right, score, depth)
       end
     end
   end
@@ -68,22 +70,21 @@ class Node
     end
   end
 
-  def max_node
-    if @right.nil?
-      return @score
+  def min_node(node)
+    if node.left == nil
+      return node.score
     else
-      @right.max_node
+      min_node(node.left)
     end
   end
 
-  def min_node
-    if @left.nil?
-      return @score
+  def max_node(node)
+    if node.right == nil
+      return node.score
     else
-      @left.min_node
+      max_node(node.right)
     end
   end
 
-end
 
 end
