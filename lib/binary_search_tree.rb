@@ -40,26 +40,6 @@ class BinarySearchTree
     end
   end
 
-  # def include?(score)
-  #   if @root == nil
-  #     return false
-  #   elsif @root.score == score
-  #     return true
-  #   elsif @root.score > score
-  #     if @root.left == nil
-  #       return false
-  #     else
-  #       @root.include_node?(@root.left, score)
-  #     end
-  #   else
-  #     if @root.right == nil
-  #       return false
-  #     else
-  #       @root.include_node?(@root.right, score)
-  #     end
-  #   end
-  # end
-
   def depth_of(score)
     if @root == nil
       return nil

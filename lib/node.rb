@@ -34,7 +34,7 @@ class Node
     elsif node.score == score
       return true
     elsif node.score > score
-        include_node?(node.left, score)
+      include_node?(node.left, score)
     else
       include_node?(node.right, score)
     end
@@ -43,20 +43,12 @@ class Node
   def depth_of_node(node, score, depth)
     if node.score == score
       return depth
+    elsif node == nil
+      return nil
     elsif node.score > score
-      if node.left == nil
-        return nil
-      else
-        depth += 1
-        depth_of_node(node.left, score, depth)
-      end
-    elsif node.score < score
-      if node.right == nil
-        return nil
-      else
-        depth += 1
-        depth_of_node(node.right, score, depth)
-      end
+      depth_of_node(node.left, score, depth)
+    else
+      depth_of_node(node.right, score, depth)
     end
   end
 
