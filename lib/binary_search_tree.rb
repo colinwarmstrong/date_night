@@ -9,34 +9,40 @@ class BinarySearchTree
     @root = nil
   end
 
-  def insert(score)
-    if @root == nil
+  def insert(score, node = @root, depth = 0)
+    if node == nil
       @root = Node.new(score)
-      return 0
-    elsif @root.score > score
-      if @root.left == nil
-        @root.left = Node.new(score)
-        return 1
+      return depth
+    elsif node.score > score
+      if node.left == nil
+        depth += 1
+        node.left = Node.new(score)
+        return depth
       else
-        @root.insert_node(@root.left, score, 2)
+        depth += 1
+        insert(score, node.left, depth)
       end
-    elsif @root.score < score
-      if @root.right == nil
-        @root.right = Node.new(score)
-        return 1
+    elsif node.score < score
+      if node.right == nil
+        depth += 1
+        node.right = Node.new(score)
+        return depth
       else
-        @root.insert_node(@root.right, score, 2)
+        depth += 1
+        insert(score, node.right, depth)
       end
     end
   end
 
-  def include?(score)
-    if @root == nil
+  def include?(score, node = @root)
+    if node == nil
       return false
-    elsif @root.score > score
-      @root.include_node?(@root.left, score)
+    elsif node.score == score
+      return true
+    elsif node.score > score
+      include?(score, node.left)
     else
-      @root.include_node?(@root.right, score)
+      include?(score, node.right)
     end
   end
 
@@ -136,17 +142,17 @@ tree = BinarySearchTree.new
 
 # tree.load('./movies.txt')
 
-tree.insert(50)
-tree.insert(40)
-tree.insert(60)
-tree.insert(30)
-tree.insert(70)
-tree.insert(75)
-tree.insert(25)
-tree.insert(69)
-tree.insert(45)
-tree.insert(65)
-
+puts tree.insert(50)
+puts tree.insert(40)
+puts tree.insert(60)
+puts tree.insert(30)
+puts tree.insert(70)
+puts tree.insert(75)
+puts tree.insert(25)
+puts tree.insert(69)
+puts tree.insert(45)
+puts tree.insert(65)
+puts "-" * 40
 puts tree.include?(50)
 puts tree.include?(40)
 puts tree.include?(60)
@@ -164,12 +170,11 @@ puts tree.depth_of(71)
 puts tree.depth_of(69)
 puts tree.depth_of(65)
 puts "-" * 40
-
 puts tree.min
 puts tree.max
-
+puts "-" * 40
 tree.sort
-
+puts "-" * 40
 puts tree.height
-
+puts "-" * 40
 puts tree.leaves
