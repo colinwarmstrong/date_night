@@ -1,5 +1,3 @@
-require './lib/binary_search_tree.rb'
-
 class Node
 
   attr_accessor :score,
@@ -8,8 +6,6 @@ class Node
 
   def initialize(score)
     @score = score
-    @right = nil
-    @left = nil
   end
 
   def insert_node(node, score, depth)
@@ -19,7 +15,7 @@ class Node
         return depth
       else
         depth += 1
-        node.insert_node(node.left, score, depth)
+        insert_node(node.left, score, depth)
       end
     elsif node.score < score
       if node.right == nil
@@ -27,45 +23,45 @@ class Node
         return depth
       else
         depth += 1
-        node.insert_node(node.right, score, depth)
+        insert_node(node.right, score, depth)
       end
     end
   end
 
-  def include_node?(score)
-    if @score == score
+  def include_node?(node, score)
+    if node.score == score
       return true
-    elsif @score > score
-      if @left.nil?
+    elsif node.score > score
+      if node.left == nil
         return false
       else
-        @left.include_node?(score)
+        include_node?(node.left, score)
       end
-    elsif @score < score
-      if @right.nil?
+    elsif node.score < score
+      if node.right == nil
         return false
       else
-        @right.include_node?(score)
+        include_node?(node.right, score)
       end
     end
   end
 
-  def depth_of_node(score, depth)
-    if @score == score
+  def depth_of_node(node, score, depth)
+    if node.score == score
       return depth
-    elsif @score > score
-      if @left.nil?
+    elsif node.score > score
+      if node.left == nil
         return nil
       else
         depth += 1
-        @left.depth_of_node(score, depth)
+        depth_of_node(node.left, score, depth)
       end
-    elsif @score < score
-      if @right.nil?
+    elsif node.score < score
+      if node.right == nil
         return nil
       else
         depth += 1
-        @right.depth_of_node(score, depth)
+        depth_of_node(node.right, score, depth)
       end
     end
   end
@@ -85,6 +81,5 @@ class Node
       max_node(node.right)
     end
   end
-
 
 end

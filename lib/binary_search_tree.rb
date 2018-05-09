@@ -11,15 +11,6 @@ class BinarySearchTree
 
   def insert(score)
     if @root == nil
-      @root == Node.new(score)
-      return 0
-    else
-      @root.insert_node(@root, score, 1)
-    end
-  end
-
-  def insert(score)
-    if @root == nil
       @root = Node.new(score)
       return 0
     elsif @root.score > score
@@ -27,14 +18,14 @@ class BinarySearchTree
         @root.left = Node.new(score)
         return 1
       else
-        @root.left.insert_node(@root.left, score, 2)
+        @root.insert_node(@root.left, score, 2)
       end
     elsif @root.score < score
       if @root.right == nil
         @root.right = Node.new(score)
         return 1
       else
-        @root.right.insert_node(@root.right, score, 2)
+        @root.insert_node(@root.right, score, 2)
       end
     end
   end
@@ -45,19 +36,31 @@ class BinarySearchTree
     elsif @root.score == score
       return true
     elsif @root.score > score
-      if @root.left == nil
-        return false
-      else
-        @root.left.include_node?(score)
-      end
-    elsif @root.score < score
-      if @root.right == nil
-        return false
-      else
-        @root.right.include_node?(score)
-      end
+      @root.include_node?(@root.left, score)
+    else
+      @root.include_node?(@root.right, score)
     end
   end
+
+  # def include?(score)
+  #   if @root == nil?
+  #     return false
+  #   elsif @root.score == score
+  #     return true
+  #   elsif @root.score > score
+  #     if @root.left == nil
+  #       return false
+  #     else
+  #       @root.left.include_node?(score)
+  #     end
+  #   elsif @root.score < score
+  #     if @root.right == nil
+  #       return false
+  #     else
+  #       @root.right.include_node?(score)
+  #     end
+  #   end
+  # end
 
   def depth_of(score)
     if @root == nil
@@ -155,20 +158,20 @@ class Node
     end
   end
 
-  def include_node?(score)
-    if @score == score
+  def include_node?(node, score)
+    if node.score == score
       return true
-    elsif @score > score
-      if @left.nil?
+    elsif node.score > score
+      if node.left == nil
         return false
       else
-        @left.include_node?(score)
+        include_node?(node.left, score)
       end
-    elsif @score < score
-      if @right.nil?
+    elsif node.score < score
+      if node.right == nil
         return false
       else
-        @right.include_node?(score)
+        include_node?(node.right, score)
       end
     end
   end
