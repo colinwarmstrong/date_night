@@ -9,24 +9,35 @@ class BinarySearchTree
     @root = nil
   end
 
+  # def insert(score, node = @root, depth = 0)
+  #   if node == nil
+  #     node = Node.new(score)
+  #     return depth
+  #   elsif score < node.score
+  #     depth += 1
+  #     insert(score, node.left, depth)
+  #   else
+  #     depth += 1
+  #     insert(score, node.right, depth)
+  #   end
+  # end
+
   def insert(score, node = @root, depth = 0)
     if node == nil
       @root = Node.new(score)
       return depth
-    elsif node.score > score
+    elsif score < node.score
       if node.left == nil
-        depth += 1
         node.left = Node.new(score)
-        return depth
+        return depth += 1
       else
         depth += 1
         insert(score, node.left, depth)
       end
     elsif node.score < score
       if node.right == nil
-        depth += 1
         node.right = Node.new(score)
-        return depth
+        return depth += 1
       else
         depth += 1
         insert(score, node.right, depth)
@@ -37,9 +48,9 @@ class BinarySearchTree
   def include?(score, node = @root)
     if node == nil
       return false
-    elsif node.score == score
+    elsif score == node.score
       return true
-    elsif node.score > score
+    elsif score < node.score
       include?(score, node.left)
     else
       include?(score, node.right)
@@ -75,6 +86,10 @@ class BinarySearchTree
       max(node.right)
     end
   end
+
+  def health
+  end
+
 
   def sort
     sorted_array = []
@@ -116,9 +131,9 @@ class BinarySearchTree
       left_depth = height(node.left)
       right_depth = height(node.right)
       if left_depth > right_depth
-        return height = left_depth + 1
+        return height_of_tree = left_depth + 1
       else
-        return height = right_depth + 1
+        return height_of_tree = right_depth + 1
       end
     end
   end
@@ -136,22 +151,33 @@ class BinarySearchTree
     end
   end
 
+  def delete(score)
+    if include?(score)
+      remove(score)
+    else
+      return nil
+    end
+  end
+
+  def remove(node)
+  end
+
 end
 
 tree = BinarySearchTree.new
 
-# tree.load('./movies.txt')
+tree.load('./movies.txt')
 
-puts tree.insert(50)
-puts tree.insert(40)
-puts tree.insert(60)
-puts tree.insert(30)
-puts tree.insert(70)
-puts tree.insert(75)
-puts tree.insert(25)
-puts tree.insert(69)
-puts tree.insert(45)
-puts tree.insert(65)
+# puts tree.insert(50)
+# puts tree.insert(40)
+# puts tree.insert(60)
+# puts tree.insert(30)
+# puts tree.insert(70)
+# puts tree.insert(75)
+# puts tree.insert(25)
+# puts tree.insert(69)
+# puts tree.insert(45)
+# puts tree.insert(65)
 puts "-" * 40
 puts tree.include?(50)
 puts tree.include?(40)
