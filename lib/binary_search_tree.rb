@@ -3,10 +3,9 @@ require 'pry'
 
 class BinarySearchTree
 
-  attr_accessor :root
-
   def initialize
     @root = nil
+    @total_nodes = 0
   end
 
   # def insert(score, node = @root, depth = 0)
@@ -29,6 +28,7 @@ class BinarySearchTree
     elsif score < node.score
       if node.left == nil
         node.left = Node.new(score)
+        @total_nodes += 1
         return depth += 1
       else
         depth += 1
@@ -37,6 +37,7 @@ class BinarySearchTree
     elsif score > node.score
       if node.right == nil
         node.right = Node.new(score)
+        @total_nodes += 1
         return depth += 1
       else
         depth += 1
@@ -49,6 +50,8 @@ class BinarySearchTree
 
   def include?(score, node = @root)
     if node == nil
+      return false
+    elsif node.score == nil
       return false
     elsif score == node.score
       return true
@@ -74,7 +77,9 @@ class BinarySearchTree
   end
 
   def min(node = @root)
-    if node.left == nil
+    if @root == nil
+      return nil
+    elsif node.left == nil
       return node.score
     else
       min(node.left)
@@ -82,20 +87,30 @@ class BinarySearchTree
   end
 
   def max(node = @root)
-    if node.right == nil
+    if @root == nil
+      return nil
+    elsif node.right == nil
       return node.score
     else
       max(node.right)
     end
   end
 
+
+
+
   def health
+
   end
 
-
   def sort
-    sorted_array = []
-    return sort_recursion(@root, sorted_array)
+    if @root == nil
+      return nil
+    else
+      sorted_array = []
+      sorted_array_of_movies = sort_recursion(@root, sorted_array)
+      return sorted_array_of_movies
+    end
   end
 
   def sort_recursion(node, array)
@@ -123,6 +138,7 @@ class BinarySearchTree
         insert(movie_line_array[0].to_i)
       end
     end
+    @total_nodes += movies_loaded_count
     movies_loaded_count
   end
 
@@ -153,33 +169,72 @@ class BinarySearchTree
     end
   end
 
-  def delete(score)
+  def delete(score, node =  @root)
+    puts "--DELETE--"
     if include?(score)
+      puts "SCORE IS INCLUDED"
       remove(score)
     else
       return nil
     end
   end
 
-  def remove(node)
+  def remove(score, node = @root)
+    puts "--REMOVE--"
+    if node.score == score
+      puts "SCORE EQUALS NODE"
+      rebuild(score, node)
+    elsif node.score > score
+      puts "SCORE IS LESS THAN NODE, GO LEFT"
+      remove(score, node.left)
+    else
+      puts "SCORE IS MORE THAN NODE, GO RIGHT"
+      remove(score, node.right)
+    end
+  end
+
+  def rebuild(score, node)
+    puts '--REBUILD--'
+    if node.left == nil && node.right == nil
+      puts "SCORE IS LEAF, COOL BEANS"
+      deleted_score = node.score
+      node.score = nil
+      return deleted_score
+    elsif node.right == nil
+      puts "NODE HAS NO RIGHT NODE, INSERT LEFT NODE"
+      deleted_score = node.score
+      node.score = node.left.score
+      return deleted_score
+    elsif node.left == nil
+      puts "NODE HAS NO LEFT NODE, INSERT RIGHT NODE"
+      deleted_score = node.score
+      node.score = node.right.score
+      return deleted_score
+    else
+      "RECURVSIEVELY REBUILD"
+      rebuild(node.score, node.right)
+      rebuild(node.score, node.left)
+    end
   end
 
 end
 
 tree = BinarySearchTree.new
 
-tree.load('./movies.txt')
+# tree.load('./movies.txt')
 
-# puts tree.insert(50)
-# puts tree.insert(40)
-# puts tree.insert(60)
-# puts tree.insert(30)
-# puts tree.insert(70)
-# puts tree.insert(75)
-# puts tree.insert(25)
-# puts tree.insert(69)
-# puts tree.insert(45)
-# puts tree.insert(65)
+puts tree.insert(50)
+puts tree.insert(40)
+puts tree.insert(60)
+puts tree.insert(30)
+puts tree.insert(70)
+puts tree.insert(75)
+puts tree.insert(25)
+puts tree.insert(69)
+puts tree.insert(45)
+puts tree.insert(65)
+puts tree.insert(80)
+puts tree.insert(90)
 puts "-" * 40
 puts tree.include?(50)
 puts tree.include?(40)
@@ -202,8 +257,15 @@ puts tree.min
 puts tree.max
 puts "-" * 40
 
-tree.sort
-
+x = tree.sort
+puts x
+puts "-" * 40
 puts tree.height
 puts "-" * 40
 puts tree.leaves
+
+puts tree.include?(30)
+
+puts tree.delete(30)
+
+puts tree.include?(30)
