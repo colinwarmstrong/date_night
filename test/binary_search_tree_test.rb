@@ -102,9 +102,24 @@ class BinarySearchTreeTest < Minitest::Test
     tree.insert(50)
     tree.insert(60)
     tree.insert(40)
-    assert tree.include?(50)
-    tree.delete(50)
-    refute tree.include?(50)
+    assert tree.include?(40)
+    tree.delete(40)
+    refute tree.include?(40)
+  end
+
+  def test_if_health_works_at_zero_depth
+    tree = BinarySearchTree.new
+    tree.insert(50)
+    depth_zero_health = tree.health(0)
+    assert_equal depth_zero_health, [[50, 1, 100]]
+  end
+
+  def test_if_count_children_nodes_is_accurate
+    tree = BinarySearchTree.new
+    tree.insert(50)
+    tree.insert(60)
+    tree.insert(40)
+    assert_equal tree.count_children_nodes, 3
   end
 
 end
