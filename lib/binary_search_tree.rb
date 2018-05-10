@@ -194,144 +194,64 @@ class BinarySearchTree
   def rebuild(score, node)
     if node.left == nil && node.right == nil
       deleted_score = node.score
+      node.score = nil
       node = nil
-      return deleted_score
+      deleted_score
     elsif node.right == nil
       deleted_score = node.score
-      node.score = node.left.score
-      return deleted_score
+      node.score = nil
+      node = node.left
+      deleted_score
     elsif node.left == nil
       deleted_score = node.score
-      node.score = node.right.score
-      return deleted_score
+      node.score = nil
+      node = node.right
+      deleted_score
     else
-      deleted_node_score = node.score
-      minimum_of_right_subtree = min(node.right)
-      node.score = minimum_of_right_subtree
-      remove(node.score, node.right)
+      deleted_score = node.score
+      minimum = min(node.right)
+      node.score = minimum
+      remove(minimum, node.right)
+      deleted_score
     end
-    deleted_node_score
   end
-
-  # def rebuild(score, node)
-  #   if node.left == nil && node.right == nil
-  #     deleted_score = node.score
-  #     node.score = nil
-  #     return deleted_score
-  #   elsif node.right == nil
-  #     deleted_score = node.score
-  #     node.score = node.left.score
-  #     return deleted_score
-  #   elsif node.left == nil
-  #     deleted_score = node.score
-  #     node.score = node.right.score
-  #     return deleted_score
-  #   else
-  #     deleted_node_score = node.score
-  #     minimum_of_right_subtree = min(node.right)
-  #     node.score = minimum_of_right_subtree
-  #     remove(node.score, node.right)
-  #   end
-  #   deleted_node_score
-  # end
 
 end
 
 tree = BinarySearchTree.new
-
 puts tree.load('./movies.txt')
-
-# puts tree.depth_of(71)
-# puts tree.depth_of(17)
-# puts tree.depth_of(80)
-# puts tree.depth_of(55)
-# puts tree.depth_of(75)
-# puts "-" * 40
-# puts tree.health(3)
-# puts tree.insert(60)
-# puts tree.insert(40)
-# puts tree.insert(30)
-# puts tree.insert(20)
+# puts tree.insert(50)
 # puts tree.insert(40)
 # puts tree.insert(60)
 # puts tree.insert(70)
-#
-# puts tree.insert(80)
 # puts tree.insert(30)
-# puts tree.insert(70)
-# puts tree.insert(80)
-# puts tree.insert(30)
-# puts tree.insert(20)
-# puts tree.insert(10)
-# puts "-" * 40
-# puts tree.height
-# puts tree.insert(30)
-# puts tree.insert(70)
-# puts tree.insert(75)
-# puts tree.insert(25)
-# puts tree.insert(69)
-# puts tree.insert(45)
-# puts tree.insert(65)
-# puts tree.insert(80)
-# puts tree.insert(90)
-# puts "-" * 40
-#
-# puts tree.include?(50)
-# puts tree.include?(40)
-# puts tree.include?(60)
-# puts tree.include?(30)
-# puts tree.include?(70)
-# puts tree.include?(65)
-# puts tree.include?(101)
-# puts "-" * 40
-# puts tree.depth_of(50)
-# puts tree.depth_of(40)
-# puts tree.depth_of(60)
-# puts tree.depth_of(30)
-# puts tree.depth_of(70)
-# puts tree.depth_of(71)
-# puts tree.depth_of(69)
-# puts tree.depth_of(65)
-# puts "-" * 40
-# puts tree.min
-# puts tree.max
-# puts "-" * 40
-#
-# x = tree.sort
-# puts x
-# puts "-" * 40
-# puts tree.height
-# puts "-" * 40
-# puts tree.leaves
 
-# puts tree.include?(30)
-# puts tree.delete(30)
-# puts tree.include?(30)
-#
-# puts tree.include?(71)
-# puts tree.delete(71)
-# puts tree.include?(71)
-#
-# puts tree.include?(69)
-# puts tree.delete(69)
-# puts tree.include?(69)
-
-puts tree.depth_of(70)
+puts tree.include?(50)
+puts tree.include?(40)
+puts tree.include?(60)
 puts tree.include?(70)
+puts tree.include?(30)
+puts tree.include?(71)
+
+puts tree.delete(50)
+puts tree.delete(40)
+puts tree.delete(60)
 puts tree.delete(70)
-puts tree.depth_of(70)
-puts tree.include?(70)
+puts tree.delete(30)
+puts tree.delete(71)
 
-# puts tree.include?(42)
-# puts tree.delete(42)
-# puts tree.include?(42)
-#
-# puts tree.include?(101)
-# puts tree.delete(101)
-#
-# puts tree.health(0)
-# puts tree.health(3)
-# puts tree.health(5)
-#
-# puts tree.health(0)
-# puts tree.health(5)
+puts tree.include?(50)
+puts tree.include?(40)
+puts tree.include?(60)
+puts tree.include?(70)
+puts tree.include?(30)
+puts tree.include?(71)
+
+puts tree.min
+puts tree.max
+puts tree.leaves
+puts tree.height
+
+puts tree.health(1)
+puts tree.sort
+puts tree.count_children_nodes
