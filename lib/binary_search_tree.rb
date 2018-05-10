@@ -96,11 +96,36 @@ class BinarySearchTree
     end
   end
 
+  def health(depth, node = @root)
+    health_array = []
+    node_array = []
+    if depth_of(node.score) == depth
+      node_array << node.score
+    else
+      health(depth, node.left)
+    end
+    if node.right != nil
+      health(depth, node.right)
+    end
+  end
 
-
-
-  def health
-
+  def find_children_nodes(node = @root, node_count = 1)
+    if @root == nil
+      return nil
+    elsif node.left == nil
+      puts "LEFT NODE IS NIL"
+      node_count += 1
+    else
+      "RECURSION"
+      find_children_nodes(node.left, node_count)
+      node_count += 1
+    end
+    if node.right != nil
+      "RIGHT NODE IS NOT NIL, GO RIGHT"
+      find_children_nodes(node.right, node_count)
+      node_count += 1
+    end
+    return node_count
   end
 
   def sort
@@ -159,8 +184,7 @@ class BinarySearchTree
   def leaves(node = @root)
     if node == nil
       return 0
-    elsif
-      node.left == nil && node.right == nil
+    elsif node.left == nil && node.right == nil
       return 1
     else
       left_leaves = leaves(node.left)
@@ -169,7 +193,7 @@ class BinarySearchTree
     end
   end
 
-  def delete(score, node =  @root)
+  def delete(score, node = @root)
     puts "--DELETE--"
     if include?(score)
       puts "SCORE IS INCLUDED"
@@ -211,10 +235,12 @@ class BinarySearchTree
       node.score = node.right.score
       return deleted_score
     else
-      "RECURVSIEVELY REBUILD"
-      rebuild(node.score, node.right)
-      rebuild(node.score, node.left)
+      deleted_node_score = node.score
+      minimum_of_right_subtree = min(node.right)
+      node.score = minimum_of_right_subtree
+      remove(node.score, node.right)
     end
+    deleted_node_score
   end
 
 end
@@ -236,6 +262,13 @@ puts tree.insert(65)
 puts tree.insert(80)
 puts tree.insert(90)
 puts "-" * 40
+
+puts tree.include?(70)
+puts tree.delete(70)
+puts tree.include?(70)
+
+# puts tree.find_children_nodes
+
 puts tree.include?(50)
 puts tree.include?(40)
 puts tree.include?(60)
