@@ -121,5 +121,4 @@ class BinarySearchTreeTest < Minitest::Test
     tree.insert(40)
     assert_equal tree.count_children_nodes, 3
   end
-
 end

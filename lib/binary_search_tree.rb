@@ -1,8 +1,6 @@
 require './lib/node.rb'
-require 'pry'
 
 class BinarySearchTree
-
   def initialize
     @root = nil
   end
@@ -35,8 +33,6 @@ class BinarySearchTree
   def include?(score, node = @root)
     if node == nil
       return false
-    elsif node.score == nil
-      return false
     elsif score == node.score
       return true
     elsif score < node.score
@@ -47,7 +43,7 @@ class BinarySearchTree
   end
 
   def depth_of(score, node = @root, depth = 0)
-    if node.score == nil
+    if node == nil
       return nil
     elsif node.score == score
       return depth
@@ -61,22 +57,18 @@ class BinarySearchTree
   end
 
   def min(node = @root)
-    if @root == nil
-      return nil
-    elsif node.left == nil
-      return node.score
-    else
+    if node.left != nil
       min(node.left)
+    else
+      node.score
     end
   end
 
   def max(node = @root)
-    if @root == nil
-      return nil
-    elsif node.right == nil
-      return node.score
-    else
+    if node.right != nil
       max(node.right)
+    else
+      node.score
     end
   end
 
@@ -174,46 +166,77 @@ class BinarySearchTree
   end
 
   def delete(score, node = @root)
-    if include?(score)
-      remove(score)
-    else
+    if node == nil
       return nil
-    end
-  end
-
-  def remove(score, node = @root)
-    if node.score == score
-      rebuild(score, node)
     elsif node.score > score
-      remove(score, node.left)
+      delete(score, node.left)
+    elsif node.score < score
+      delete(score, node.right)
     else
-      remove(score, node.right)
+      if node.left == nil && node.right == nil
+        node = nil
+      elsif node.left == nil
+        node = node.right
+      elsif node.right == nil
+        node = node.left
+      else
+        minimum_of_right_subtree = min(node.right)
+        node.score = minimum_of_right_subtree
+        delete(minimum_of_right_subtree, node.right)
+      end
     end
+    return score
   end
-
-  def rebuild(score, node)
-    if node.left == nil && node.right == nil
-      deleted_score = node.score
-      node.score = nil
-      node = nil
-      deleted_score
-    elsif node.right == nil
-      deleted_score = node.score
-      node.score = nil
-      node = node.left
-      deleted_score
-    elsif node.left == nil
-      deleted_score = node.score
-      node.score = nil
-      node = node.right
-      deleted_score
-    else
-      deleted_score = node.score
-      minimum = min(node.right)
-      node.score = minimum
-      remove(minimum, node.right)
-      deleted_score
-    end
-  end
-
 end
+
+tree = BinarySearchTree.new
+
+puts tree.insert(50)
+puts tree.insert(60)
+puts tree.insert(40)
+puts tree.insert(70)
+puts tree.insert(30)
+
+puts tree.include?(50)
+puts tree.include?(60)
+puts tree.include?(40)
+puts tree.include?(70)
+puts tree.include?(30)
+puts tree.include?(69)
+
+puts tree.depth_of(50)
+puts tree.depth_of(40)
+puts tree.depth_of(60)
+puts tree.depth_of(70)
+puts tree.depth_of(30)
+
+puts tree.min
+puts tree.max
+
+puts tree.leaves
+puts tree.height
+
+tree.sort
+
+print tree.health(0)
+puts "-----"
+print tree.health(1)
+puts "-----"
+print tree.health(2)
+puts "-----"
+
+puts tree.include?(50)
+puts tree.delete(50)
+puts tree.include?(50)
+
+puts tree.include?(60)
+puts tree.delete(60)
+puts tree.include?(60)
+
+puts tree.include?(40)
+puts tree.delete(40)
+puts tree.include?(40)
+
+puts tree.include?(30)
+puts tree.delete(30)
+puts tree.include?(30)
