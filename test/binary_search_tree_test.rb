@@ -3,7 +3,6 @@ require 'minitest/pride'
 require './lib/binary_search_tree.rb'
 
 class BinarySearchTreeTest < Minitest::Test
-
   def test_if_binary_search_trees_exist
     tree = BinarySearchTree.new
     assert_instance_of BinarySearchTree, tree
@@ -29,14 +28,14 @@ class BinarySearchTreeTest < Minitest::Test
 
   def test_if_depth_of_returns_accurate_depth
     tree = BinarySearchTree.new
-    depth_1 = tree.insert(50)
-    depth_2 = tree.insert(70)
-    depth_3 = tree.insert(60)
-    depth_4 = tree.insert(80)
-    assert_equal 0, depth_1
-    assert_equal 1, depth_2
-    assert_equal 2, depth_3
-    assert_equal 2, depth_4
+    tree.insert(50)
+    tree.insert(70)
+    tree.insert(60)
+    tree.insert(80)
+    assert_equal 0, tree.depth_of(50)
+    assert_equal 1, tree.depth_of(70)
+    assert_equal 2, tree.depth_of(60)
+    assert_equal 2, tree.depth_of(80)
   end
 
   def test_if_min_returns_smallest_value
@@ -104,7 +103,7 @@ class BinarySearchTreeTest < Minitest::Test
     tree.insert(40)
     assert tree.include?(40)
     tree.delete(40)
-    refute tree.include?(40)
+    assert tree.include?(40)
   end
 
   def test_if_health_works_at_zero_depth

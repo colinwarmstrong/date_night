@@ -3,7 +3,6 @@ require 'minitest/pride'
 require './lib/node.rb'
 
 class NodeTest < Minitest::Test
-
   def test_if_nodes_exist
     n = Node.new(50)
     assert_instance_of Node, n
@@ -19,9 +18,8 @@ class NodeTest < Minitest::Test
   end
 
   def test_if_initialized_right_and_left_nodes_are_nil
-    n = Node.new(50)
-    assert_nil n.left
-    assert_nil n.right
+    node = Node.new(50)
+    assert_nil node.left
+    assert_nil node.right
   end
-
 end

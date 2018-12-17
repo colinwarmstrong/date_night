@@ -6,35 +6,32 @@ class BinarySearchTree
   end
 
   def insert(score, node = @root, depth = 0)
-    if node == nil
+    if node.nil?
       @root = Node.new(score)
-      return depth
+      depth
     elsif score < node.score
-      if node.left == nil
+      if node.left.nil?
         node.left = Node.new(score)
-        return depth += 1
+        depth
       else
-        depth += 1
-        insert(score, node.left, depth)
+        insert(score, node.left, depth + 1)
       end
     elsif score > node.score
-      if node.right == nil
+      if node.right.nil?
         node.right = Node.new(score)
-        return depth += 1
+        depth
       else
-        depth += 1
-        insert(score, node.right, depth)
+        insert(score, node.right, depth + 1)
       end
-    else
-      return nil
     end
+    depth
   end
 
   def include?(score, node = @root)
-    if node == nil
-      return false
+    if node.nil?
+      false
     elsif score == node.score
-      return true
+      true
     elsif score < node.score
       include?(score, node.left)
     else
@@ -43,21 +40,19 @@ class BinarySearchTree
   end
 
   def depth_of(score, node = @root, depth = 0)
-    if node == nil
-      return nil
+    if node.nil?
+      nil
     elsif node.score == score
-      return depth
+      depth
     elsif node.score > score
-      depth += 1
-      depth_of(score, node.left, depth)
+      depth_of(score, node.left, depth + 1)
     else
-      depth += 1
-      depth_of(score, node.right,  depth)
+      depth_of(score, node.right, depth + 1)
     end
   end
 
   def min(node = @root)
-    if node.left != nil
+    if !node.left.nil?
       min(node.left)
     else
       node.score
@@ -65,7 +60,7 @@ class BinarySearchTree
   end
 
   def max(node = @root)
-    if node.right != nil
+    if !node.right.nil?
       max(node.right)
     else
       node.score
@@ -73,26 +68,24 @@ class BinarySearchTree
   end
 
   def sort
-    if @root == nil
-      return nil
+    if @root.nil?
+      nil
     else
       sorted_array = []
       sorted_array_of_movies = sort_recursion(@root, sorted_array)
-      return sorted_array_of_movies
+      sorted_array_of_movies
     end
   end
 
   def sort_recursion(node, array)
-    if node.left == nil
+    if node.left.nil?
       array << node.score
     else
       sort_recursion(node.left, array)
       array << node.score
     end
-    if node.right != nil
-      sort_recursion(node.right, array)
-    end
-    return array
+    sort_recursion(node.right, array) unless node.right.nil?
+    array
   end
 
   def load(file)
@@ -100,20 +93,18 @@ class BinarySearchTree
     array_of_movie_lines = File.readlines(file)
     array_of_movie_lines.each do |movie|
       movie_line_array = movie.split(',')
-      if include?(movie_line_array[0].to_i)
-        next
-      else
-        movies_loaded_count += 1
-        insert(movie_line_array[0].to_i)
-      end
+      next if include?(movie_line_array[0].to_i)
+
+      movies_loaded_count += 1
+      insert(movie_line_array[0].to_i)
     end
     movies_loaded_count
   end
 
   def health(depth, node = @root, health_array = [])
-    if node == nil
-      return nil
-    elsif depth_of(node.score) == depth
+    return nil if node.nil?
+
+    if depth_of(node.score) == depth
       node_array = []
       children_count = count_children_nodes(node)
       children_ratio = children_count.to_f / count_children_nodes.to_f
@@ -130,55 +121,53 @@ class BinarySearchTree
   end
 
   def count_children_nodes(node = @root)
-    if node == nil
-      return 0
-    else
-      left_children = count_children_nodes(node.left)
-      right_children = count_children_nodes(node.right)
-      return left_children + right_children + 1
-    end
+    return 0 if node.nil?
+
+    left_children = count_children_nodes(node.left)
+    right_children = count_children_nodes(node.right)
+    left_children + right_children + 1
   end
 
   def height(node = @root)
-    if node == nil
-      return -1
+    if node.nil?
+      -1
     else
       left_depth = height(node.left)
       right_depth = height(node.right)
       if left_depth > right_depth
-        return height_of_tree = left_depth + 1
+        return left_depth + 1
       else
-        return height_of_tree = right_depth + 1
+        return right_depth + 1
       end
     end
   end
 
   def leaves(node = @root)
-    if node == nil
-      return 0
-    elsif node.left == nil && node.right == nil
-      return 1
+    if node.nil?
+      0
+    elsif node.left.nil? && node.right.nil?
+      1
     else
       left_leaves = leaves(node.left)
       right_leaves = leaves(node.right)
-      return left_leaves + right_leaves
+      left_leaves + right_leaves
     end
   end
 
   def delete(score, node = @root)
-    if node == nil
+    if node.nil?
       return nil
     elsif node.score > score
       delete(score, node.left)
     elsif node.score < score
       delete(score, node.right)
     else
-      if node.left == nil && node.right == nil
-        node = nil
-      elsif node.left == nil
-        node = node.right
-      elsif node.right == nil
-        node = node.left
+      if node.left.nil? && node.right.nil?
+        nil
+      elsif node.left.nil?
+        node.right
+      elsif node.right.nil?
+        node.left
       else
         minimum_of_right_subtree = min(node.right)
         node.score = minimum_of_right_subtree
@@ -218,12 +207,9 @@ puts tree.height
 
 tree.sort
 
-print tree.health(0)
-puts "-----"
-print tree.health(1)
-puts "-----"
-print tree.health(2)
-puts "-----"
+p tree.health(0)
+p tree.health(1)
+p tree.health(2)
 
 puts tree.include?(50)
 puts tree.delete(50)
